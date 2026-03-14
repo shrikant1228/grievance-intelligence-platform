@@ -1,7 +1,9 @@
 fastapi
 uvicorn
-pymongo
 python-dotenv
+pymongo
 slowapi
 python-multipart
+requests
 PyJWT
+Pillow
