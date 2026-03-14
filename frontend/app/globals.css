@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-[#050510] text-slate-200 overflow-x-hidden;
+    /* Deep space base */
+    background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+    min-height: 100vh;
+  }
+
+  /* Nebulae overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+      radial-gradient(circle at 30% 20%, rgba(138, 43, 226, 0.15), transparent 40%),
+      radial-gradient(circle at 70% 60%, rgba(0, 210, 255, 0.12), transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(255, 0, 128, 0.1), transparent 40%);
+    pointer-events: none;
+    z-index: -1;
+    animation: nebula-drift 40s infinite linear;
+    background-size: cover;
+  }
+}
+
+@keyframes nebula-drift {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

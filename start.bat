@@ -1,0 +1,3 @@
+@echo off
+echo Running CivicSense AI master startup script...
+python start.py
