@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.pyc
+
 .env
 
 # Node
@@ -12,6 +13,16 @@ node_modules/
 # Logs
 *.log
 *.txt
+
+venv/
+.env
+
+# Uploads
+uploads/
+*.jpg
+*.jpeg
+*.png
+
 
 # VS Code
 .vscode/
