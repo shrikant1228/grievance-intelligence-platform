@@ -62,33 +62,64 @@ app.include_router(admin_router, prefix="/api/admin", tags=["Admin Dashboard"])
 
 from app.db.mongodb import users_collection
 
+# @app.on_event("startup")
+# async def startup_event():
+#     logger.info("CivicSense AI Backend starting up... Connecting to NLP Core.")
+    
+#     # Seed default users if missing
+#     import hashlib
+#     from datetime import datetime, timezone
+    
+#     def hash_string(text: str) -> str:
+#         return hashlib.sha256(text.encode()).hexdigest()
+        
+#     defaults = [
+#         {"phone": "9999999999", "password": "admin123", "mpin": "1234", "role": "admin"},
+#         {"phone": "8888888888", "password": "dept123", "mpin": "1234", "role": "department"},
+#         {"phone": "7899047261", "password": "cit123", "mpin": "1234", "role": "citizen"}
+#     ]
+    
+#     for default_user in defaults:
+#         if not users_collection.find_one({"phone": default_user["phone"]}):
+#             users_collection.insert_one({
+#                 "phone": default_user["phone"],
+#                 "password_hash": hash_string(default_user["password"]),
+#                 "mpin_hash": hash_string(default_user["mpin"]),
+#                 "role": default_user["role"],
+#                 "created_at": datetime.now(timezone.utc)
+#             })
+#             logger.info(f"Seeded default {default_user['role']} user.")
 @app.on_event("startup")
 async def startup_event():
-    logger.info("CivicSense AI Backend starting up... Connecting to NLP Core.")
-    
-    # Seed default users if missing
-    import hashlib
-    from datetime import datetime, timezone
-    
-    def hash_string(text: str) -> str:
-        return hashlib.sha256(text.encode()).hexdigest()
+    logger.info("CivicSense AI Backend starting up...")
+
+    try:
+        import hashlib
+        from datetime import datetime, timezone
         
-    defaults = [
-        {"phone": "9999999999", "password": "admin123", "mpin": "1234", "role": "admin"},
-        {"phone": "8888888888", "password": "dept123", "mpin": "1234", "role": "department"},
-        {"phone": "7899047261", "password": "cit123", "mpin": "1234", "role": "citizen"}
-    ]
-    
-    for default_user in defaults:
-        if not users_collection.find_one({"phone": default_user["phone"]}):
-            users_collection.insert_one({
-                "phone": default_user["phone"],
-                "password_hash": hash_string(default_user["password"]),
-                "mpin_hash": hash_string(default_user["mpin"]),
-                "role": default_user["role"],
-                "created_at": datetime.now(timezone.utc)
-            })
-            logger.info(f"Seeded default {default_user['role']} user.")
+        def hash_string(text: str) -> str:
+            return hashlib.sha256(text.encode()).hexdigest()
+
+        defaults = [
+            {"phone": "9999999999", "password": "admin123", "mpin": "1234", "role": "admin"},
+            {"phone": "8888888888", "password": "dept123", "mpin": "1234", "role": "department"},
+            {"phone": "7899047261", "password": "cit123", "mpin": "1234", "role": "citizen"}
+        ]
+
+        for default_user in defaults:
+            if not users_collection.find_one({"phone": default_user["phone"]}):
+                users_collection.insert_one({
+                    "phone": default_user["phone"],
+                    "password_hash": hash_string(default_user["password"]),
+                    "mpin_hash": hash_string(default_user["mpin"]),
+                    "role": default_user["role"],
+                    "created_at": datetime.now(timezone.utc)
+                })
+
+        logger.info("Default users seeded if missing.")
+
+    except Exception as e:
+        logger.error(f"Startup DB check failed: {e}")
 
 @app.get("/api/health")
 def health():
